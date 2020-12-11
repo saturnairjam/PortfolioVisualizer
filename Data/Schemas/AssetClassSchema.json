@@ -1,0 +1,50 @@
+{
+    "$schema": "http://json-schema.org/schema#",
+    "title": "Asset Class Schema",
+    "type": "object",
+    "additionalProperties": false,
+    "properties":
+    {
+        "Name":
+        {
+            "description": "asset class name",
+            "type": "string"
+        },
+        "StartYear":
+        {
+            "description": "start year of NAV array's first entry",
+            "type": "integer",
+            "minimum": 0
+        },
+        "StartMonth":
+        {
+            "description": "start month of NAV array's first entry",
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 12
+        },
+        "Currency":
+        {
+            "description": "currency in which net asset values are expressed",
+            "type": "string",
+            "enum": ["INR", "USD"]
+        },
+        "NetAssetValueArray":
+        {
+            "description": "net asset value array",
+            "type": "array",
+            "items":
+            {
+                "type": "number"
+            }
+        }
+    },
+    "required":
+    [
+        "Name",
+        "StartYear",
+        "StartMonth",
+        "Currency",
+        "NetAssetValueArray"
+    ]
+}

@@ -1,0 +1,15 @@
+{
+    "Name": "Golden Butterfly Portfolio",
+    "AssetClassWeights":
+    [
+        ["NIFTY 50 Total Returns Index", 20],
+        ["CRISIL Liquid Fund Index", 20],
+        ["CRISIL 10-year GILT Index", 20],
+        ["Gold Price Per Troy Oz", 20],
+        ["NASDAQ 100 Total Returns Index", 20]
+    ],
+    "RebalancingStrategy": "Periodic",
+    "MonthsBetweenRebalancing": 12,
+    "RebalancingThreshold": 0,
+    "InflationAdjustedReturns": false
+}

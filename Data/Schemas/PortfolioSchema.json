@@ -1,0 +1,64 @@
+{
+    "$schema": "http://json-schema.org/schema#",
+    "title": "Portfolio Schema",
+    "type": "object",
+    "additionalProperties": false,
+    "properties":
+    {
+        "Name":
+        {
+            "description": "portfolio name",
+            "type": "string"
+        },
+        "AssetClassWeights":
+        {
+            "description": "list of asset classes & their (un-normalized) weights",
+            "type": "array",
+            "items":
+            {
+                "type": "array",
+                "items":
+                [
+                    {
+                        "type": "string"
+                    },
+                    {
+                        "type": "integer",
+                        "minimum": 0
+                    }
+                ]
+            }
+        },
+        "RebalancingStrategy":
+        {
+            "type": "string",
+            "enum": ["Threshold", "Periodic"]
+        },
+        "MonthsBetweenRebalancing":
+        {
+            "description": "the number of months between rebalancing (used as minimum for threshold-based rebalancing)",
+            "type": "integer",
+            "minimum": 1
+        },
+        "RebalancingThreshold":
+        {
+            "description": "the rebalancing threshold expressed as a percentage; ignored for periodic rebalancing",
+            "type": "integer",
+            "minimum": 0
+        },
+        "InflationAdjustedReturns":
+        {
+            "description": "whether calculated portfolio returns should be inflation-adjusted or not",
+            "type": "boolean"
+        }
+    },
+    "required":
+    [
+        "Name",
+        "AssetClassWeights",
+        "RebalancingStrategy",
+        "MonthsBetweenRebalancing",
+        "RebalancingThreshold",
+        "InflationAdjustedReturns"
+    ]
+}

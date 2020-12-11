@@ -1,0 +1,14 @@
+{
+    "Name": "Permanent Portfolio",
+    "AssetClassWeights":
+    [
+        ["NIFTY 50 Total Returns Index", 25],
+        ["CRISIL Liquid Fund Index", 25],
+        ["CRISIL 10-year GILT Index", 25],
+        ["Gold Price Per Troy Oz", 25]
+    ],
+    "RebalancingStrategy": "Periodic",
+    "MonthsBetweenRebalancing": 12,
+    "RebalancingThreshold": 0,
+    "InflationAdjustedReturns": false
+}

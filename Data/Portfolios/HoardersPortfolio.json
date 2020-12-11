@@ -1,0 +1,11 @@
+{
+    "Name": "Hoarder's Portfolio",
+    "AssetClassWeights":
+    [
+        ["Gold Price Per Troy Oz", 100]
+    ],
+    "RebalancingStrategy": "Periodic",
+    "MonthsBetweenRebalancing": 1,
+    "RebalancingThreshold": 0,
+    "InflationAdjustedReturns": false
+}

@@ -1,0 +1,11 @@
+{
+    "Name": "Gambler's Portfolio",
+    "AssetClassWeights":
+    [
+        ["NIFTY 50 Total Returns Index", 100]
+    ],
+    "RebalancingStrategy": "Periodic",
+    "MonthsBetweenRebalancing": 12,
+    "RebalancingThreshold": 0,
+    "InflationAdjustedReturns": false
+}

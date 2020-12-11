@@ -1,0 +1,11 @@
+{
+    "Name": "Coward's Portfolio",
+    "AssetClassWeights":
+    [
+        ["CRISIL Liquid Fund Index", 100]
+    ],
+    "RebalancingStrategy": "Periodic",
+    "MonthsBetweenRebalancing": 12,
+    "RebalancingThreshold": 0,
+    "InflationAdjustedReturns": false
+}

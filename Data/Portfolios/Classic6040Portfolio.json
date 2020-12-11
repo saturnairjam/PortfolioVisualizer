@@ -1,0 +1,12 @@
+{
+    "Name": "Classic 60-40 Portfolio",
+    "AssetClassWeights":
+    [
+        ["NIFTY 50 Total Returns Index", 60],
+        ["CRISIL Liquid Fund Index", 40]
+    ],
+    "RebalancingStrategy": "Periodic",
+    "MonthsBetweenRebalancing": 12,
+    "RebalancingThreshold": 0,
+    "InflationAdjustedReturns": false
+}
