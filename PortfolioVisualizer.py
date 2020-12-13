@@ -40,8 +40,45 @@ def main():
 
     try:
         validate(instance = portfolio, schema = portfolio_schema)
-    except jsonschema.exceptions.ValidationError as err:
-        sys.exit("portfolio schema invalid: {}".format(err))
+    except jsonschema.exceptions.ValidationError as e:
+        sys.exit("portfolio schema invalid: {}".format(e))
+
+    # load asset class schema JSON from file
+
+    with open('Data/Schemas/AssetClassSchema.json') as f:
+        try:
+            asset_class_schema = json.load(f)
+        except ValueError as e:
+            sys.exit("invalid JSON in asset class schema file: {}".format(e))
+
+    # iterate over all JSON files in 'asset classes' folder
+
+    asset_classes_directory = 'Data/AssetClasses'
+
+    asset_classes = {}
+
+    for filename in os.listdir(asset_classes_directory):
+
+        # load asset class JSON from file
+
+        with open(os.path.join(asset_classes_directory, filename)) as f:
+            try:
+                asset_class = json.load(f)
+            except ValueError as e:
+                sys.exit("invalid JSON in asset class file: {}".format(e))
+
+        print(asset_class['Name'], flush=True)
+
+        # validate asset class JSON against schema
+
+        try:
+            validate(instance = asset_class, schema = asset_class_schema)
+        except jsonschema.exceptions.ValidationError as e:
+            sys.exit("asset class schema invalid: {}".format(e))
+
+        # add asset class to asset classes dictionary
+
+        asset_classes[asset_class['Name']] = asset_class
 
 if __name__ == "__main__":
     main()
