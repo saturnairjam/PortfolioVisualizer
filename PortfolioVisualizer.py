@@ -23,12 +23,18 @@ def main():
     # load portfolio JSON from file
 
     with open(args.portfolio) as f:
-        portfolio = json.load(f)
+        try:
+            portfolio = json.load(f)
+        except ValueError as e:
+            sys.exit("invalid JSON in portfolio file: {}".format(e))
 
     # load portfolio schema JSON from file
 
     with open('Data/Schemas/PortfolioSchema.json') as f:
-        portfolio_schema = json.load(f)
+        try:
+            portfolio_schema = json.load(f)
+        except ValueError as e:
+            sys.exit("invalid JSON in portfolio schema file: {}".format(e))
 
     # validate portfolio JSON against schema
 
