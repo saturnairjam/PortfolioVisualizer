@@ -80,5 +80,11 @@ def main():
 
         asset_classes[asset_class['Name']] = asset_class
 
+    # verify that each asset class in portfolio exists
+
+    for i in portfolio['AssetClassWeights']:
+        if i[0] not in asset_classes:
+            sys.exit("invalid asset class: '{}'".format(i[0]))
+
 if __name__ == "__main__":
     main()
