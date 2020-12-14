@@ -6,6 +6,20 @@ import sys
 
 from jsonschema import validate
 
+class AssetClass:
+
+    MonthOnMonthGrowth = []
+
+    def __init__(self, name, startYear, startMonth):
+        self.Name = name
+        self.StartYear = startYear
+        self.StartMonth = startMonth
+
+    def CalculateMonthOnMonthGrowth(self, navList):
+        self.MonthOnMonthGrowth.clear()
+        for i in range(len(navList) - 1):
+            self.MonthOnMonthGrowth.append((navList[i+1] / navList[i]) - 1)
+
 def main():
 
     parser = argparse.ArgumentParser()
@@ -43,6 +57,8 @@ def main():
     except jsonschema.exceptions.ValidationError as e:
         sys.exit("portfolio schema invalid: {}".format(e))
 
+    print("portfolio loaded & validated: {}".format(portfolio['Name']), flush=True)
+
     # load asset class schema JSON from file
 
     with open('Data/Schemas/AssetClassSchema.json') as f:
@@ -67,8 +83,6 @@ def main():
             except ValueError as e:
                 sys.exit("invalid JSON in asset class file: {}".format(e))
 
-        print(asset_class['Name'], flush=True)
-
         # validate asset class JSON against schema
 
         try:
@@ -76,9 +90,14 @@ def main():
         except jsonschema.exceptions.ValidationError as e:
             sys.exit("asset class schema invalid: {}".format(e))
 
+        print("asset class loaded & validated: {}".format(asset_class['Name']), flush=True)
+
+        asset_class_object = AssetClass(asset_class['Name'], asset_class['StartYear'], asset_class['StartMonth'])
+        asset_class_object.CalculateMonthOnMonthGrowth(asset_class['NetAssetValueArray'])
+
         # add asset class to asset classes dictionary
 
-        asset_classes[asset_class['Name']] = asset_class
+        asset_classes[asset_class['Name']] = asset_class_object
 
     # verify that each asset class in portfolio exists
 
