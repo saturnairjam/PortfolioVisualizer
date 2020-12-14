@@ -1,8 +1,8 @@
 {
-    "Name": "Coward's Portfolio",
+    "Name": "All Equity Portfolio",
     "AssetClassWeights":
     [
-        ["CRISIL Liquid Fund Index", 100]
+        ["NIFTY 50 Total Returns Index", 100]
     ],
     "RebalancingStrategy": "Periodic",
     "MonthsBetweenRebalancing": 12,

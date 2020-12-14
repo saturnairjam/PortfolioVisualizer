@@ -1,8 +1,8 @@
 {
-    "Name": "Gambler's Portfolio",
+    "Name": "Conservative Portfolio",
     "AssetClassWeights":
     [
-        ["NIFTY 50 Total Returns Index", 100]
+        ["CRISIL Liquid Fund Index", 100]
     ],
     "RebalancingStrategy": "Periodic",
     "MonthsBetweenRebalancing": 12,
