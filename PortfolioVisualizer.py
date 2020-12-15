@@ -46,14 +46,14 @@ def main():
 
     with open('Data/Schemas/PortfolioSchema.json') as f:
         try:
-            portfolio_schema = json.load(f)
+            portfolioSchema = json.load(f)
         except ValueError as e:
             sys.exit("invalid JSON in portfolio schema file: {}".format(e))
 
     # validate portfolio JSON against schema
 
     try:
-        validate(instance = portfolio, schema = portfolio_schema)
+        validate(instance = portfolio, schema = portfolioSchema)
     except jsonschema.exceptions.ValidationError as e:
         sys.exit("portfolio schema invalid: {}".format(e))
 
@@ -63,46 +63,46 @@ def main():
 
     with open('Data/Schemas/AssetClassSchema.json') as f:
         try:
-            asset_class_schema = json.load(f)
+            assetClassSchema = json.load(f)
         except ValueError as e:
             sys.exit("invalid JSON in asset class schema file: {}".format(e))
 
     # iterate over all JSON files in 'asset classes' folder
 
-    asset_classes_directory = 'Data/AssetClasses'
+    assetClassesDirectory = 'Data/AssetClasses'
 
-    asset_classes = {}
+    assetClasses = {}
 
-    for filename in os.listdir(asset_classes_directory):
+    for filename in os.listdir(assetClassesDirectory):
 
         # load asset class JSON from file
 
-        with open(os.path.join(asset_classes_directory, filename)) as f:
+        with open(os.path.join(assetClassesDirectory, filename)) as f:
             try:
-                asset_class = json.load(f)
+                assetClass = json.load(f)
             except ValueError as e:
                 sys.exit("invalid JSON in asset class file: {}".format(e))
 
         # validate asset class JSON against schema
 
         try:
-            validate(instance = asset_class, schema = asset_class_schema)
+            validate(instance = assetClass, schema = assetClassSchema)
         except jsonschema.exceptions.ValidationError as e:
             sys.exit("asset class schema invalid: {}".format(e))
 
-        print("asset class loaded & validated: {}".format(asset_class['Name']), flush=True)
+        print("asset class loaded & validated: {}".format(assetClass['Name']), flush=True)
 
-        asset_class_object = AssetClass(asset_class['Name'], asset_class['StartYear'], asset_class['StartMonth'])
-        asset_class_object.CalculateMonthOnMonthGrowth(asset_class['NetAssetValueArray'])
+        assetClassObject = AssetClass(assetClass['Name'], assetClass['StartYear'], assetClass['StartMonth'])
+        assetClassObject.CalculateMonthOnMonthGrowth(assetClass['NetAssetValueArray'])
 
         # add asset class to asset classes dictionary
 
-        asset_classes[asset_class['Name']] = asset_class_object
+        assetClasses[assetClass['Name']] = assetClassObject
 
     # verify that each asset class in portfolio exists
 
     for i in portfolio['AssetClassWeights']:
-        if i[0] not in asset_classes:
+        if i[0] not in assetClasses:
             sys.exit("invalid asset class: '{}'".format(i[0]))
 
 if __name__ == "__main__":
