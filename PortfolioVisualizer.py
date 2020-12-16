@@ -38,7 +38,7 @@ def main():
 
     with open(args.portfolio) as f:
         try:
-            portfolio = json.load(f)
+            portfolioJson = json.load(f)
         except ValueError as e:
             sys.exit("invalid JSON in portfolio file: {}".format(e))
 
@@ -46,28 +46,28 @@ def main():
 
     with open('Data/Schemas/PortfolioSchema.json') as f:
         try:
-            portfolioSchema = json.load(f)
+            portfolioSchemaJson = json.load(f)
         except ValueError as e:
             sys.exit("invalid JSON in portfolio schema file: {}".format(e))
 
     # validate portfolio JSON against schema
 
     try:
-        validate(instance = portfolio, schema = portfolioSchema)
+        validate(instance = portfolioJson, schema = portfolioSchemaJson)
     except jsonschema.exceptions.ValidationError as e:
         sys.exit("portfolio schema invalid: {}".format(e))
 
-    print("portfolio loaded & validated: {}".format(portfolio['Name']), flush=True)
+    print("portfolio loaded & validated: {}".format(portfolioJson['Name']), flush=True)
 
     # load asset class schema JSON from file
 
     with open('Data/Schemas/AssetClassSchema.json') as f:
         try:
-            assetClassSchema = json.load(f)
+            assetClassSchemaJson = json.load(f)
         except ValueError as e:
             sys.exit("invalid JSON in asset class schema file: {}".format(e))
 
-    # iterate over all JSON files in 'asset classes' folder
+    # iterate over all JSON files in 'asset classes' directory
 
     assetClassesDirectory = 'Data/AssetClasses'
 
@@ -86,7 +86,7 @@ def main():
         # validate asset class JSON against schema
 
         try:
-            validate(instance = assetClass, schema = assetClassSchema)
+            validate(instance = assetClass, schema = assetClassSchemaJson)
         except jsonschema.exceptions.ValidationError as e:
             sys.exit("asset class schema invalid: {}".format(e))
 
@@ -105,7 +105,7 @@ def main():
     portfolioStartYear = 0;
     portfolioStartMonth = 0;
 
-    for i in portfolio['AssetClassWeights']:
+    for i in portfolioJson['AssetClassWeights']:
 
         assetClassName = i[0]
 
@@ -125,7 +125,7 @@ def main():
 
                 portfolioStartMonth = assetClasses[assetClassName].StartMonth
 
-    print("{} start date: {}-{}".format(portfolio['Name'], portfolioStartYear, portfolioStartMonth), flush=True)
+    print("{} start date: {}-{}".format(portfolioJson['Name'], portfolioStartYear, portfolioStartMonth), flush=True)
 
 if __name__ == "__main__":
     main()
