@@ -100,10 +100,32 @@ def main():
         assetClasses[assetClass['Name']] = assetClassObject
 
     # verify that each asset class in portfolio exists
+    # also compute portfolio start date (most recent start date of all asset classes in portfolio)
+
+    portfolioStartYear = 0;
+    portfolioStartMonth = 0;
 
     for i in portfolio['AssetClassWeights']:
-        if i[0] not in assetClasses:
-            sys.exit("invalid asset class: '{}'".format(i[0]))
+
+        assetClassName = i[0]
+
+        if assetClassName not in assetClasses:
+            sys.exit("invalid asset class: '{}'".format(assetClassName))
+
+        print("{} start date: {}-{}".format(assetClassName, assetClasses[assetClassName].StartYear, assetClasses[assetClassName].StartMonth), flush=True)
+
+        if assetClasses[assetClassName].StartYear > portfolioStartYear:
+
+            portfolioStartYear = assetClasses[assetClassName].StartYear
+            portfolioStartMonth = assetClasses[assetClassName].StartMonth
+
+        elif assetClasses[assetClassName].StartYear == portfolioStartYear:
+
+            if assetClasses[assetClassName].StartMonth > portfolioStartMonth:
+
+                portfolioStartMonth = assetClasses[assetClassName].StartMonth
+
+    print("{} start date: {}-{}".format(portfolio['Name'], portfolioStartYear, portfolioStartMonth), flush=True)
 
 if __name__ == "__main__":
     main()
