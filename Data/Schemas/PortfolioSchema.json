@@ -44,7 +44,8 @@
         {
             "description": "the rebalancing threshold expressed as a percentage; ignored for periodic rebalancing",
             "type": "integer",
-            "minimum": 0
+            "minimum": 0,
+            "maximum": 100
         },
         "InflationAdjustedReturns":
         {

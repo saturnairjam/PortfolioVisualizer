@@ -20,6 +20,26 @@ class AssetClass:
         for i in range(len(navList) - 1):
             self.MonthOnMonthGrowth.append((navList[i+1] / navList[i]) - 1)
 
+class Portfolio:
+
+    def __init__(self, portfolioJson, startYear, startMonth):
+
+        self.Name = portfolioJson['Name']
+        self.AssetClassWeights = portfolioJson['AssetClassWeights']
+        self.RebalancingStrategy = portfolioJson['RebalancingStrategy']
+        self.MonthsBetweenRebalancing = portfolioJson['MonthsBetweenRebalancing']
+        self.RebalancingThreshold = portfolioJson['RebalancingThreshold']
+        self.StartYear = startYear
+        self.StartMonth = startMonth
+
+        # normalize asset class weights
+
+        totalWeight = 0
+        for i in self.AssetClassWeights:
+            totalWeight += i[1]
+        for i in self.AssetClassWeights:
+            i[1] = i[1] / totalWeight
+
 def main():
 
     parser = argparse.ArgumentParser()
@@ -112,8 +132,6 @@ def main():
         if assetClassName not in assetClasses:
             sys.exit("invalid asset class: '{}'".format(assetClassName))
 
-        print("{} start date: {}-{}".format(assetClassName, assetClasses[assetClassName].StartYear, assetClasses[assetClassName].StartMonth), flush=True)
-
         if assetClasses[assetClassName].StartYear > portfolioStartYear:
 
             portfolioStartYear = assetClasses[assetClassName].StartYear
@@ -125,7 +143,9 @@ def main():
 
                 portfolioStartMonth = assetClasses[assetClassName].StartMonth
 
-    print("{} start date: {}-{}".format(portfolioJson['Name'], portfolioStartYear, portfolioStartMonth), flush=True)
+    print("'{}' start date: {}-{}".format(portfolioJson['Name'], portfolioStartYear, portfolioStartMonth), flush=True)
+
+    portfolioObject = Portfolio(portfolioJson, portfolioStartYear, portfolioStartMonth)
 
 if __name__ == "__main__":
     main()
