@@ -10,13 +10,15 @@ class AssetClass:
 
     MonthOnMonthGrowth = []
 
-    def __init__(self, name, startYear, startMonth):
-        self.Name = name
-        self.StartYear = startYear
-        self.StartMonth = startMonth
+    def __init__(self, assetClassJson):
+        self.Name = assetClassJson['Name']
+        self.StartYear = assetClassJson['StartYear']
+        self.StartMonth = assetClassJson['StartMonth']
 
-    def CalculateMonthOnMonthGrowth(self, navList):
+        # calculate month-on-month growth from NAV array
+
         self.MonthOnMonthGrowth.clear()
+        navList = assetClassJson['NetAssetValueArray']
         for i in range(len(navList) - 1):
             self.MonthOnMonthGrowth.append((navList[i+1] / navList[i]) - 1)
 
@@ -99,25 +101,24 @@ def main():
 
         with open(os.path.join(assetClassesDirectory, filename)) as f:
             try:
-                assetClass = json.load(f)
+                assetClassJson = json.load(f)
             except ValueError as e:
                 sys.exit("invalid JSON in asset class file: {}".format(e))
 
         # validate asset class JSON against schema
 
         try:
-            validate(instance = assetClass, schema = assetClassSchemaJson)
+            validate(instance = assetClassJson, schema = assetClassSchemaJson)
         except jsonschema.exceptions.ValidationError as e:
             sys.exit("asset class schema invalid: {}".format(e))
 
-        print("asset class loaded & validated: {}".format(assetClass['Name']), flush=True)
+        print("asset class loaded & validated: {}".format(assetClassJson['Name']), flush=True)
 
-        assetClassObject = AssetClass(assetClass['Name'], assetClass['StartYear'], assetClass['StartMonth'])
-        assetClassObject.CalculateMonthOnMonthGrowth(assetClass['NetAssetValueArray'])
+        assetClassObject = AssetClass(assetClassJson)
 
         # add asset class to asset classes dictionary
 
-        assetClasses[assetClass['Name']] = assetClassObject
+        assetClasses[assetClassJson['Name']] = assetClassObject
 
     # verify that each asset class in portfolio exists
     # also compute portfolio start date (most recent start date of all asset classes in portfolio)
