@@ -12,8 +12,7 @@ class AssetClass:
 
     def __init__(self, assetClassJson):
         self.Name = assetClassJson['Name']
-        self.StartYear = assetClassJson['StartYear']
-        self.StartMonth = assetClassJson['StartMonth']
+        self.StartDate = (assetClassJson['StartYear'] * 12) + (assetClassJson['StartMonth'] - 1)
 
         # calculate month-on-month growth from NAV array
 
@@ -24,15 +23,14 @@ class AssetClass:
 
 class Portfolio:
 
-    def __init__(self, portfolioJson, startYear, startMonth):
+    def __init__(self, portfolioJson, startDate):
 
         self.Name = portfolioJson['Name']
         self.AssetClassWeights = portfolioJson['AssetClassWeights']
         self.RebalancingStrategy = portfolioJson['RebalancingStrategy']
         self.MonthsBetweenRebalancing = portfolioJson['MonthsBetweenRebalancing']
         self.RebalancingThreshold = portfolioJson['RebalancingThreshold']
-        self.StartYear = startYear
-        self.StartMonth = startMonth
+        self.StartDate = startDate
 
         # normalize asset class weights
 
@@ -128,8 +126,7 @@ def main():
     # verify that each asset class in portfolio exists
     # also compute portfolio start date (most recent start date of all asset classes in portfolio)
 
-    portfolioStartYear = 0;
-    portfolioStartMonth = 0;
+    portfolioStartDate = 0
 
     for i in portfolioJson['AssetClassWeights']:
 
@@ -138,20 +135,12 @@ def main():
         if assetClassName not in assetClasses:
             sys.exit("invalid asset class: '{}'".format(assetClassName))
 
-        if assetClasses[assetClassName].StartYear > portfolioStartYear:
+        if assetClasses[assetClassName].StartDate > portfolioStartDate:
+            portfolioStartDate = assetClasses[assetClassName].StartDate
 
-            portfolioStartYear = assetClasses[assetClassName].StartYear
-            portfolioStartMonth = assetClasses[assetClassName].StartMonth
+    print("'{}' start date: {}-{}".format(portfolioJson['Name'], portfolioStartDate // 12, (portfolioStartDate % 12) + 1), flush=True)
 
-        elif assetClasses[assetClassName].StartYear == portfolioStartYear:
-
-            if assetClasses[assetClassName].StartMonth > portfolioStartMonth:
-
-                portfolioStartMonth = assetClasses[assetClassName].StartMonth
-
-    print("'{}' start date: {}-{}".format(portfolioJson['Name'], portfolioStartYear, portfolioStartMonth), flush=True)
-
-    portfolioObject = Portfolio(portfolioJson, portfolioStartYear, portfolioStartMonth)
+    portfolioObject = Portfolio(portfolioJson, portfolioStartDate)
 
 if __name__ == "__main__":
     main()
