@@ -10,9 +10,12 @@ class AssetClass:
 
     MonthOnMonthGrowth = []
 
+    StartDateOffset = 0
+
     def __init__(self, assetClassJson):
         self.Name = assetClassJson['Name']
         self.StartDate = (assetClassJson['StartYear'] * 12) + (assetClassJson['StartMonth'] - 1)
+        self.StartDateOffset = 0
 
         # calculate month-on-month growth from NAV array
 
@@ -121,7 +124,7 @@ def main():
 
         if found:
             assetClasses[assetClassJson['Name']] = AssetClass(assetClassJson)
-            print("asset class validated & loaded: {}".format(assetClassJson['Name']), flush=True)
+            print("asset class loaded & validated: {}".format(assetClassJson['Name']), flush=True)
 
     # verify that each asset class in portfolio exists
     # also compute portfolio start date (most recent start date of all asset classes in portfolio)
@@ -140,7 +143,12 @@ def main():
 
     print("'{}' start date: {}-{}".format(portfolioJson['Name'], portfolioStartDate // 12, (portfolioStartDate % 12) + 1), flush=True)
 
-    portfolioObject = Portfolio(portfolioJson, portfolioStartDate)
+    portfolio = Portfolio(portfolioJson, portfolioStartDate)
+
+    # compute start date offsets for each asset class based on portfolio start date
+
+    for i in assetClasses:
+        assetClasses[i].StartDateOffset = portfolioStartDate - assetClasses[i].StartDate
 
 if __name__ == "__main__":
     main()
