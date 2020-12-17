@@ -93,7 +93,7 @@ def main():
 
     assetClassesDirectory = 'Data/AssetClasses'
 
-    assetClasses = {}
+    assetClasses = {} # asset class dictionary
 
     for filename in os.listdir(assetClassesDirectory):
 
@@ -112,13 +112,18 @@ def main():
         except jsonschema.exceptions.ValidationError as e:
             sys.exit("asset class schema invalid: {}".format(e))
 
-        print("asset class loaded & validated: {}".format(assetClassJson['Name']), flush=True)
+        # add asset class to dictionary only if it is part of portfolio
 
-        assetClassObject = AssetClass(assetClassJson)
+        found = False
 
-        # add asset class to asset classes dictionary
+        for i in portfolioJson['AssetClassWeights']:
+            if assetClassJson['Name'] == i[0]:
+                found = True
+                break
 
-        assetClasses[assetClassJson['Name']] = assetClassObject
+        if found:
+            assetClasses[assetClassJson['Name']] = AssetClass(assetClassJson)
+            print("asset class validated & loaded: {}".format(assetClassJson['Name']), flush=True)
 
     # verify that each asset class in portfolio exists
     # also compute portfolio start date (most recent start date of all asset classes in portfolio)
